@@ -1,0 +1,275 @@
+This is a copy of one node from the Info file internals-1.
+For full information on installing and porting GCC, refer to the
+internals manual:
+
+  Info file   internals
+  TeX output  internals.dvi
+  TeX source  internals.texinfo
+
+Installing GNU CC
+*****************
+
+Here is the procedure for installing GNU CC on a Unix system.
+
+* Menu:
+
+* VMS Install::   See below for installation on VMS.
+
+  1. Edit `Makefile'.  If you are using HPUX, or any form of system
+     V, you must make a few changes described in comments at the
+     beginning of the file.
+
+  2. On a Sequent system, go to the Berkeley universe.
+
+  3. Choose configuration files.
+
+        * Make a symbolic link named `config.h' to the top-level
+          config file for the machine you are using (*note
+          Config::.).  This file is responsible for defining
+          information about the host machine.  It includes `tm.h'.
+
+          The file's name should be `config-MACHINE.h', with these
+          exceptions:
+
+         `config-vms.h'
+               for vaxen running VMS.
+
+         `config-vaxv.h'
+               for vaxen running system V.
+
+         `config-i386v.h'
+               for Intel 80386's running system V.
+
+         `config-sun4.h'
+               for Suns (model 3 or 4) running *operating system*
+               version 4.
+
+         `config-hp9k3.h'
+               for the HP 9000 series 300.
+
+         `config-gnx.h'
+               for the ns32000 running Genix
+
+          If your system does not support symbolic links, you might
+          want to set up `config.h' to contain a `#include' command
+          which refers to the appropriate file.
+
+        * Make a symbolic link named `tm.h' to the
+          machine-description macro file for your machine (its name
+          should be `tm-MACHINE.h').
+
+          If your system is a 68000, don't use the file `tm-m68k.h'
+          directly.  Instead, use one of these files:
+
+         `tm-sun3.h'
+               for Sun 3 machines.
+
+         `tm-sun2.h'
+               for Sun 2 machines.
+
+         `tm-3b1.h'
+               for AT&T 3b1 (aka 7300 Unix PC).
+
+         `tm-isi68.h'
+               for Integrated Solutions systems.
+
+         `tm-news800.h'
+               for SONY News systems.
+
+         `tm-hp9k320.h'
+               for HPUX systems, if you are using GNU CC with the
+               system's assembler and linker.
+
+         `tm-hp9k320g.h'
+               for HPUX systems, if you are using the GNU assembler,
+               linker and other utilities.  Not all of the pieces of
+               GNU software needed for this mode of operation are as
+               yet in distribution; full instructions will appear
+               here in the future.
+
+          For the vax, use `tm-vax.h' on BSD Unix, `tm-vaxv.h' on
+          system V, or `tm-vms.h' on VMS.
+
+          For the SPARC (Sun 4), use `tm-sparc.h'.
+
+          For the Motorola 88000, use `tm-m88k.h'.  The support for
+          the 88000 has a few unfinished spots because there was no
+          way to run the output.  Bugs are suspected in handling of
+          branch-tables and in the function prologue and epilogue.
+
+          For the 80386, don't use `tm-i386.h' directly.  Use
+          `tm-i386v.h' if the target machine is running system V,
+          `tm-seq386.h' for a Sequent 386 system, or `tm-compaq.h'
+          for a Compaq.
+
+          For the 32000, use `tm-sequent.h' if you are using a
+          Sequent machine, or `tm-encore.h' for an Encore machine, or
+          `tm-gnx.h' if you are using Genix version 3; otherwise,
+          perhaps `tm-ns32k.h' will work for you.
+
+          Note that Genix has bugs in `alloca' and `malloc'; you must
+          get the compiled versions of these from GNU Emacs and edit
+          GNU CC's `Makefile' to use them.
+
+          Note that Encore systems are supported only under BSD.
+
+        * Make a symbolic link named `md' to the machine description
+          pattern file (its name should be `MACHINE.md').
+
+        * Make a symbolic link named `aux-output.c' to the output
+          subroutine file for your machine (its name should be
+          `output-MACHINE.c').
+
+  4. Make sure the Bison parser generator is installed.  (This is
+     unnecessary if the Bison output files `c-parse.tab.c' and
+     `cexp.c' are more recent than `c-parse.y' and `cexp.y' and you
+     do not plan to change the `.y' files.)
+
+     Note that if you have an old version of Bison you may get an
+     error from the line with the `%expect' directive.  If so, simply
+     remove that line from `c-parse.y' and proceed.
+
+  5. If you are using a Sun, make sure the environment variable
+     `FLOAT_OPTION' is not set.  If this option were set to `f68881'
+     when `gnulib' is compiled, the resulting code would demand to be
+     linked with a special startup file and will not link properly
+     without special pains.
+
+  6. Build the compiler.  Just type `make' in the compiler directory.
+
+  7. Move the first-stage object files and executables into a
+     subdirectory with this command:
+
+          make stage1
+
+     The files are moved into a subdirectory named `stage1'.  Once
+     installation is complete, you may wish to delete these files
+     with `rm -r stage1'.
+
+  8. Recompile the compiler with itself, with this command:
+
+          make CC=stage1/gcc CFLAGS="-g -O -Bstage1/"
+
+     On a 68000 or 68020 system lacking floating point hardware,
+     unless you have selected a `tm.h' file that expects by default
+     that there is no such hardware, do this instead:
+
+          make CC=stage1/gcc CFLAGS="-g -O -Bstage1/ -msoft-float"
+
+  9. If you wish to test the compiler by compiling it with itself one
+     more time, do this:
+
+          make stage2
+          Make CC=stage2/gcc CFLAGS="-g -O -Bstage2/"
+          foreach file (*.o)
+          cmp $file stage2/$file
+          end
+
+     This will notify you if any of these stage 3 object files
+     differs from those of stage 2.  Any difference, no matter how
+     innocuous, indicates that the stage 2 compiler has compiled GNU
+     CC incorrectly, and is therefore a potentially serious bug which
+     you should investigate and report (*note Bugs::.).
+
+     Aside from the `-B' option, the options should be the same as
+     when you made stage 2.
+
+ 10. Install the compiler driver, the compiler's passes and run-time
+     support.  You can use the following command:
+
+          make install
+
+     This copies the files `cc1', `cpp' and `gnulib' to files
+     `gcc-cc1', `gcc-cpp' and `gcc-gnulib' in directory
+     `/usr/local/lib', which is where the compiler driver program
+     looks for them.  It also copies the driver program `gcc' into
+     the directory `/usr/local', so that it appears in typical
+     execution search paths.
+
+     *Warning: there is a bug in `alloca' in the Sun library.  To
+     avoid this bug, install the binaries of GNU CC that were
+     compiled by GNU CC.  They use `alloca' as a built-in function
+     and never the one in the library.*
+
+     *Warning: the GNU CPP may not work for `ioctl.h', `ttychars.h'
+     and other system header files unless the `-traditional' option
+     is used.*  The bug is in the header files: at least on some
+     machines, they rely on behavior that is incompatible with ANSI
+     C.  This behavior consists of substituting for macro argument
+     names when they appear inside of character constants.  The
+     `-traditional' option tells GNU CC to behave the way these
+     headers expect.
+
+     Because of this problem, you might prefer to configure GNU CC to
+     use the system's own C preprocessor.  To do so, make the file
+     `/usr/local/lib/gcc-cpp' a link to `/lib/cpp'.
+
+     Alternatively, on Sun systems and 4.3BSD at least, you can
+     correct the include files by running the shell script
+     `fixincludes'.  This installs modified, corrected copies of the
+     files `ioctl.h', `ttychars.h' and many others, in a special
+     directory where only GNU CC will normally look for them.
+
+     See the file `fixincludes' for a list of all the files we know
+     to require correction.
+
+If you cannot install the compiler's passes and run-time support in
+`/usr/local/lib', you can alternatively use the `-B' option to
+specify a prefix by which they may be found.  The compiler
+concatenates the prefix with the names  `cpp', `cc1' and `gnulib'. 
+Thus, you can put the files in a directory `/usr/foo/gcc' and specify
+`-B/usr/foo/gcc/' when you run GNU CC.
+
+Also, you can specify an alternative default directory for these
+files by setting the Make variable `libdir' when you make GNU CC.
+
+
+
+File: internals,  Node: VMS Install,  Prev: Installation,  Up: Installation
+
+Installing GNU CC on VMS
+========================
+
+The VMS version of GNU CC is distributed in an unusual tape format
+which consists of several tape files.  The first is a command file;
+the second is an executable program which reads Unix tar format; the
+third is another command file which uses this program to read the
+remainder of the tape.
+
+To load the tape, it suffices to mount it `/foreign' and then do
+`@mta0:' to execute the command file at the beginning of the tape.
+
+The tape contains executables and object files as well as sources, so
+no compilation is necessary unless you change the sources.  (This is
+a good thing, since you probably don't have any other C compiler.) 
+If you must recompile, here is how:
+
+  1. Copy the file `tm-vms.h' to `tm.h', `config-vms.h' to
+     `config.h', `vax.md' to `md.' and `output-vax.c' to
+     `aux-output.c'.
+
+  2. Type `@make' to do recompile everything.
+
+To install the `GCC' command so you can use the compiler easily, in
+the same manner as you use the VMS C compiler, you must install the
+VMS CLD file for GNU CC as follows:
+
+  1. Define the VMS logical names `GNU_CC' and `GNU_CC_INCLUDE' to
+     point to the directories where the GNU CC executables
+     (`gcc-cpp', `gcc-cc1', etc.) and the C include files are kept. 
+     This should be done with the commands:
+
+          $ assign /super /system disk:[gcc] gnu_cc
+          $ assign /super /system disk:[gcc.include] gnu_cc_include
+
+     with the appropriate disk and directory names.  These commands
+     can be placed in your system startup file so they will be
+     executed whenever the machine is rebooted.
+
+  2. Install the `GCC' command with the command line:
+
+          $ set command /table=sys$library:dcltables gnu_cc:gcc
+
+     Now you can invoke the compiler with a command like `gcc
+     /verbose file.c', which is equivalent to the command `gcc -v -c
+     file.c' in Unix.

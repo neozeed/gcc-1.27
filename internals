@@ -1,0 +1,33 @@
+Info file internals, produced by Makeinfo, -*- Text -*- from input
+file internals.texinfo.
+
+This file documents the internals of the GNU compiler.
+
+Copyright (C) 1988 Free Software Foundation, Inc.
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+Permission is granted to copy and distribute modified versions of
+this manual under the conditions for verbatim copying, provided also
+that the section entitled ``GNU CC General Public License'' is
+included exactly as in the original, and provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+Permission is granted to copy and distribute translations of this
+manual into another language, under the above conditions for modified
+versions, except that the section entitled ``GNU CC General Public
+License'' and this permission notice may be included in translations
+approved by the Free Software Foundation instead of in the original
+English.
+
+Indirect:
+internals-1: 1076
+internals-2: 48874
+internals-3: 95217
+internals-4: 143806
+internals-5: 192348
+internals-6: 241559
+internals-7: 287577
