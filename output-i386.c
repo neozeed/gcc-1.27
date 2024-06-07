@@ -618,7 +618,7 @@ output_move_const_double (operands)
 }
 
 
-static char *
+char *
 output_move_const_single (operands)
      rtx *operands;
 {

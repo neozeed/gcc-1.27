@@ -18,7 +18,8 @@ can know your rights and responsibilities.  It should be in a
 file named COPYING.  Among other things, the copyright notice
 and this notice must be preserved on all copies.  */
 
-
+#include <stdio.h>
+#include <stdlib.h>
 #include "config.h"
 #include "rtl.h"
 #include "tree.h"

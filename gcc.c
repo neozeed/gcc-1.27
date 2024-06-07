@@ -116,7 +116,7 @@ position among the other output files.
 #include <stdio.h>
 #include <sys/types.h>
 #include <signal.h>
-#include <sys/file.h>
+//#include <sys/file.h>
 #include "config.h"
 #include "obstack.h"
 
@@ -432,16 +432,22 @@ execute ()
       win = (access (temp, X_OK) == 0);
     }
 
-  if (vflag)
+//  if (vflag)
     {
       int i;
+      char command[255];
+      memset(command,0x0,sizeof(command));
       for (i = 0; argbuf[i]; i++)
 	{
 	  if (i == 0 && win)
 	    fprintf (stderr, " %s", temp);
 	  else
 	    fprintf (stderr, " %s", argbuf[i]);
+	  if(i>0)
+	    strcat(command," ");
+	  strcat(command,argbuf[i]);
 	}
+      system(command);
       fprintf (stderr, "\n");
       fflush (stderr);
 #ifdef DEBUG
@@ -455,6 +461,7 @@ execute ()
 #endif				/* DEBUG */
     }
 
+#if 0
 #ifdef USG
   pid = fork ();
   if (pid < 0)
@@ -478,6 +485,7 @@ execute ()
     fatal ("Program %s got fatal signal %d.", argbuf[0], (status & 0x7F));
   if (((status & 0xFF00) >> 8) >= MIN_FATAL_STATUS)
     return -1;
+#endif
   return 0;
 }
 
@@ -1039,7 +1047,7 @@ fatal_error (signum)
   delete_temp_files (0);
   /* Get the same signal again, this time not handled,
      so its normal effect occurs.  */
-  kill (getpid (), signum);
+//  kill (getpid (), signum);
 }
 
 int
@@ -1056,8 +1064,8 @@ main (argc, argv)
 
   if (signal (SIGINT, SIG_IGN) != SIG_IGN)
     signal (SIGINT, fatal_error);
-  if (signal (SIGHUP, SIG_IGN) != SIG_IGN)
-    signal (SIGHUP, fatal_error);
+//  if (signal (SIGHUP, SIG_IGN) != SIG_IGN)
+//    signal (SIGHUP, fatal_error);
   if (signal (SIGTERM, SIG_IGN) != SIG_IGN)
     signal (SIGTERM, fatal_error);
 

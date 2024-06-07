@@ -32,13 +32,13 @@ and this notice must be preserved on all copies.  */
 #include <sys/stat.h>
 
 #ifdef USG
-#include <sys/param.h>
-#include <sys/times.h>
+//#include <sys/param.h>
+//#include <sys/times.h>
 #include <time.h>   /* Correct for hpux at least.  Is it good on other USG?  */
 #else
 #ifndef VMS
-#include <sys/time.h>
-#include <sys/resource.h>
+//#include <sys/time.h>
+//#include <sys/resource.h>
 #endif
 #endif
 
@@ -260,6 +260,7 @@ int dump_time;
 int
 gettime ()
 {
+#if 0
 #ifdef USG
   struct tms tms;
 #else
@@ -291,6 +292,10 @@ gettime ()
   times (&vms_times);
   return (vms_times.proc_user_time + vms_times.proc_system_time) * 10000;
 #endif
+#endif
+#else
+quiet_flag=1;
+return 0;
 #endif
 }
 

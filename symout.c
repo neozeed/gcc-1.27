@@ -30,7 +30,7 @@ and this notice must be preserved on all copies.  */
 
 /* Get N_SO from stab.h if we can expect the file to exist.  */
 #ifdef DBX_DEBUGGING_INFO
-#include <stab.h>
+#include "stab.h"
 #endif
 
 /* .stabs code for source file name.  */

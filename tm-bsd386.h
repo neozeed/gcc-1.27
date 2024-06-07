@@ -198,5 +198,7 @@ and this notice must be preserved on all copies.  */
 
 /* This is how to output an assembler line defining a `double' constant.  */
 
+/*double defined.	*/
+#undef ASM_OUTPUT_DOUBLE
 #define ASM_OUTPUT_DOUBLE(FILE,VALUE)  \
   fprintf (FILE, "\t.double 0d%.20e\n", (VALUE))
