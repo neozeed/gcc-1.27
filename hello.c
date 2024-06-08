@@ -1,5 +1,6 @@
 #include <stdio.h>
 
-main()	{
+int main()      {
 printf("hello from GCC version %s\n",__VERSION__);
+return 0;
 }
