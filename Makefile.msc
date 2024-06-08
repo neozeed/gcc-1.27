@@ -1,0 +1,315 @@
+BISON = \xdjgpp.v1\bin\bison
+CC = cl
+CFLAGS =
+
+
+RTL = rtl.obj obstack.obj
+
+INSN = insn-flags.h insn-codes.h insn-config.h insn-emit.h insn-peep.h insn-recog.h insn-extract.h insn-output.h
+
+OBJ = c-decl.obj c-parse.tab.obj c-typeck.obj fold-const.obj print-tree.obj stor-layout.obj toplev.obj tree.obj \
+	version.obj symout.obj dbxout.obj sdbout.obj jump.obj flow.obj stupid.obj c-convert.obj
+
+DEPOBJ = expr.obj stmt.obj expmed.obj explow.obj optabs.obj varasm.obj cse.obj loop.obj combine.obj regclass.obj \
+	local-alloc.obj global-alloc.obj reload.obj reload1.obj recog.obj final.obj emit-rtl.obj integrate.obj
+
+INSNOBJ = insn-emit.obj insn-peep.obj insn-recog.obj insn-extract.obj insn-output.obj
+
+INSNC = insn-emit.c insn-peep.c insn-recog.c insn-extract.c insn-output.c
+
+GENEXE = gencodes.exe genconfig.exe genemit.exe genextract.exe genflags.exe genoutput.exe genpeep.exe genrecog.exe
+
+GENOBJ = genflags.obj gencodes.obj genconfig.obj genemit.obj genpeep.obj genrecog.obj genextract.obj genoutput.obj
+
+GCCOBJ = gcc.obj version.obj obstack.obj
+
+CPPOBJ = cexp.obj version.obj cccp.obj
+
+GNULIB = _adddf3.obj _addsf3.obj _ashlsi3.obj _ashrsi3.obj _cmpdf2.obj _cmpsf2.obj _divdf3.obj _divsf3.obj _divsi3.obj \
+	_eprintf.obj _extendsfdf2.obj _fixdfdi.obj _fixdfsi.obj _fixunsdfdi.obj _fixunsdfsi.obj _floatdidf.obj \
+	_floatsidf.obj _lshlsi3.obj _lshrsi3.obj _modsi3.obj _muldf3.obj _mulsf3.obj _mulsi3.obj _negdf2.obj \
+	_negsf2.obj _subdf3.obj _subsf3.obj _truncdfsf2.obj _udivsi3.obj _umodsi3.obj _umulsi3.obj
+
+
+default: cc1.exe xgcc.exe cpp.exe gnulib.lib hello.exe
+
+genflags.exe: genflags.obj $(RTL)
+	cl /Fegenflags genflags.obj rtl.obj obstack.obj
+
+gencodes.exe: gencodes.obj $(RTL)
+	cl /Fegencodes gencodes.obj rtl.obj obstack.obj 
+
+genconfig.exe: genconfig.obj $(RTL)
+	cl /Fegenconfig genconfig.obj rtl.obj obstack.obj
+
+genemit.exe: genemit.obj $(RTL)
+	cl /Fegenemit genemit.obj rtl.obj obstack.obj
+
+genpeep.exe: genpeep.obj $(RTL)
+	cl /Fegenpeep genpeep.obj rtl.obj obstack.obj
+
+genrecog.exe: genrecog.obj $(RTL)
+	cl /Fegenrecog genrecog.obj rtl.obj obstack.obj
+
+genextract.exe: genextract.obj $(RTL)
+	cl /Fegenextract genextract.obj rtl.obj obstack.obj
+
+genoutput.exe: genoutput.obj $(RTL)
+	cl /Fegenoutput genoutput.obj rtl.obj obstack.obj
+
+
+insn-flags.h: genflags.exe
+	genflags md > insn-flags.h
+
+insn-codes.h: gencodes.exe
+	gencodes md > insn-codes.h
+
+insn-config.h: genconfig.exe
+	genconfig md > insn-config.h
+
+insn-emit.h: genemit.exe
+	genemit md > insn-emit.h
+
+insn-peep.h: genpeep.exe
+	genpeep md > insn-peep.h
+
+insn-recog.h: genrecog.exe
+	genrecog md > insn-recog.h
+
+insn-extract.h: genextract.exe
+	genextract md > insn-extract.h
+
+insn-output.h: genoutput.exe
+	genoutput md > insn-output.h
+
+expr.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+stmt.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+expmed.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+explow.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+optabs.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+varasm.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+cse.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+loop.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+combine.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+regclass.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+local-alloc.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+global-alloc.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+reload.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+reload1.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+final.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+recog.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+emit-rtl.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+integrate.obj: $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+insn-emit.c: genemit.exe
+	genemit md > insn-emit.c
+
+insn-emit.obj: insn-emit.c $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+insn-peep.c: genpeep.exe
+	genpeep md > insn-peep.c
+
+insn-peep.obj: insn-peep.c $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+insn-recog.c: genrecog.exe
+	genrecog md > insn-recog.c
+
+insn-recog.obj: insn-recog.c $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+insn-extract.c: genextract.exe
+	genextract md > insn-extract.c
+
+insn-extract.obj: insn-extract.c $(INSN)
+	cl /c /Fo$*.obj $*.c
+
+insn-output.c: genoutput.exe
+	genoutput md > insn-output.c
+
+insn-output.obj: insn-output.c $(INSN)
+	cl /c /D__STDC__ /Fo$*.obj $*.c
+
+cccp.obj: cccp.c
+	$(CC) /DUSG /DGCC_INCLUDE_DIR=\"/gcc127/h\" \
+	/DGPLUSPLUS_INCLUDE_DIR=\"/gcc127/h\" /c $*.c
+
+gcc.obj: gcc.c
+	$(CC) $(CFLAGS) /DUSG /c $*.c
+
+_eprintf.obj:
+	cl /c /I. /Ox -DL_eprintf /Fo_eprintf.obj gnulib.c
+
+_umulsi3.obj:
+	cl /c /I. /Ox -DL_umulsi3 /Fo_umulsi3.obj gnulib.c
+
+_mulsi3.obj:
+	cl /c /I. /Ox -DL_mulsi3 /Fo_mulsi3.obj gnulib.c
+
+_udivsi3.obj:
+	cl /c /I. /Ox -DL_udivsi3 /Fo_udivsi3.obj gnulib.c
+
+_divsi3.obj:
+	cl /c /I. /Ox -DL_divsi3 /Fo_divsi3.obj gnulib.c
+
+_umodsi3.obj:
+	cl /c /I. /Ox -DL_umodsi3 /Fo_umodsi3.obj gnulib.c
+
+_modsi3.obj:
+	cl /c /I. /Ox -DL_modsi3 /Fo_modsi3.obj gnulib.c
+
+_lshrsi3.obj:
+	cl /c /I. /Ox -DL_lshrsi3 /Fo_lshrsi3.obj gnulib.c
+
+_lshlsi3.obj:
+	cl /c /I. /Ox -DL_lshlsi3 /Fo_lshlsi3.obj gnulib.c
+
+_ashrsi3.obj:
+	cl /c /I. /Ox -DL_ashrsi3 /Fo_ashrsi3.obj gnulib.c
+
+_ashlsi3.obj:
+	cl /c /I. /Ox -DL_ashlsi3 /Fo_ashlsi3.obj gnulib.c
+
+_divdf3.obj:
+	cl /c /I. /Ox -DL_divdf3 /Fo_divdf3.obj gnulib.c
+
+_muldf3.obj:
+	cl /c /I. /Ox -DL_muldf3 /Fo_muldf3.obj gnulib.c
+
+_negdf2.obj:
+	cl /c /I. /Ox -DL_negdf2 /Fo_negdf2.obj gnulib.c
+
+_adddf3.obj:
+	cl /c /I. /Ox -DL_adddf3 /Fo_adddf3.obj gnulib.c
+
+_subdf3.obj:
+	cl /c /I. /Ox -DL_subdf3 /Fo_subdf3.obj gnulib.c
+
+_cmpdf2.obj:
+	cl /c /I. /Ox -DL_cmpdf2 /Fo_cmpdf2.obj gnulib.c
+
+_fixunsdfsi.obj:
+	cl /c /I. /Ox -DL_fixunsdfsi /Fo_fixunsdfsi.obj gnulib.c
+
+_fixunsdfdi.obj:
+	cl /c /I. /Ox -DL_fixunsdfdi /Fo_fixunsdfdi.obj gnulib.c
+
+_fixdfsi.obj:
+	cl /c /I. /Ox -DL_fixdfsi /Fo_fixdfsi.obj gnulib.c
+
+_fixdfdi.obj:
+	cl /c /I. /Ox -DL_fixdfdi /Fo_fixdfdi.obj gnulib.c
+
+_floatsidf.obj:
+	cl /c /I. /Ox -DL_floatsidf /Fo_floatsidf.obj gnulib.c
+
+_floatdidf.obj:
+	cl /c /I. /Ox -DL_floatdidf /Fo_floatdidf.obj gnulib.c
+
+_truncdfsf2.obj:
+	cl /c /I. /Ox -DL_truncdfsf2 /Fo_truncdfsf2.obj gnulib.c
+
+_extendsfdf2.obj:
+	cl /c /I. /Ox -DL_extendsfdf2 /Fo_extendsfdf2.obj gnulib.c
+
+_addsf3.obj:
+	cl /c /I. /Ox -DL_addsf3 /Fo_addsf3.obj gnulib.c
+
+_negsf2.obj:
+	cl /c /I. /Ox -DL_negsf2 /Fo_negsf2.obj gnulib.c
+
+_subsf3.obj:
+	cl /c /I. /Ox -DL_subsf3 /Fo_subsf3.obj gnulib.c
+
+_cmpsf2.obj:
+	cl /c /I. /Ox -DL_cmpsf2 /Fo_cmpsf2.obj gnulib.c
+
+_mulsf3.obj:
+	cl /c /I. /Ox -DL_mulsf3 /Fo_mulsf3.obj gnulib.c
+
+_divsf3.obj:
+	cl /c /I. /Ox -DL_divsf3 /Fo_divsf3.obj gnulib.c
+
+
+
+cc1.exe: $(RTL) $(INSN) $(OBJ) $(DEPOBJ) $(INSNOBJ)
+	link -out:cc1.exe $(RTL) $(OBJ) $(DEPOBJ) $(INSNOBJ) -entry:mainCRTStartup $(LIBS) -subsystem:console
+
+xgcc.exe: $(GCCOBJ)
+	link -out:xgcc.exe $(GCCOBJ) -entry:mainCRTStartup $(LIBS) -subsystem:console
+
+cpp.exe: $(CPPOBJ)
+	link -out:cpp.exe $(CPPOBJ) -entry:mainCRTStartup $(LIBS) -subsystem:console
+
+gnulib.lib: $(GNULIB)
+	lib /OUT:gnulib.lib $(GNULIB)
+
+c-parse.tab.c: c-parse.y
+	$(BISON) c-parse.y
+
+cexp.c: cexp.y
+	$(BISON) cexp.y
+	ren cexp.tab.c cexp.c
+
+cexp.obj: cexp.c
+	cl /c /Fo$*.obj $*.c
+
+as.exe:
+	copy \xenixnt\bin\ax386.exe as.exe
+
+hello.exe: cc1.exe cpp.exe xgcc.exe as.exe gnulib.lib
+	xgcc -c hello.c
+	link /NODEFAULTLIB:libc.lib /NODEFAULTLIB:OLDNAMES.LIB  -out:hello.exe hello.o -entry:mainCRTStartup gnulib.lib LIBC.LIB KERNEL32.LIB
+	hello
+
+clean:
+	@del c-parse.tab.c
+	@del $(OBJ)
+	@del $(INSN) $(INSNOBJ) $(INSNC)
+	@del $(DEPOBJ)
+	@del $(RTL)
+	@del $(GENEXE) $(GENOBJ)
+	@del cc1.exe
+	@del $(GCCOBJ)
+	@del xgcc.exe
+	@del $(CPPOBJ)
+	@del cpp.exe cexp.c
+	@del $(GNULIB)
+	@del gnulib.lib
+	@del hello.exe hello.o as.exe
