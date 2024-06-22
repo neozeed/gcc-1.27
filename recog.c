@@ -41,7 +41,7 @@ rtx recog_addr_dummy;
 /* On return from `constrain_operands', indicate which alternative
    was satisfied.  */
 
-int which_alternative;
+extern int which_alternative;
 
 /* Initialize data used by the function `recog'.
    This must be called once in the compilation of a function

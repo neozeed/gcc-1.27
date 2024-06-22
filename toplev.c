@@ -74,13 +74,13 @@ int target_flags;
 /* Name of current original source file (what was input to cpp).
    This comes from each #-command in the actual input.  */
 
-char *input_filename;
+extern char *input_filename;
 
 /* Name of top-level original source file (what was input to cpp).
    This comes from the #-command at the beginning of the actual input.
    If there isn't any there, then this is the cc1 input file name.  */
 
-char *main_input_filename;
+extern char *main_input_filename;
 
 /* Current line number in real source file.  */
 
