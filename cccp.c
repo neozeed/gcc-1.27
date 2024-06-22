@@ -5009,6 +5009,7 @@ void
 perror_with_name (name)
      char *name;
 {
+#if HAVE_SYSNERR
   extern int errno, sys_nerr;
   extern char *sys_errlist[];
 
@@ -5016,6 +5017,7 @@ perror_with_name (name)
   if (errno < sys_nerr)
     fprintf (stderr, "%s for `%s'\n", sys_errlist[errno], name);
   else
+#endif
     fprintf (stderr, "undocumented error for `%s'\n", name);
 }
 

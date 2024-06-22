@@ -1225,13 +1225,15 @@ save_string (s, len)
 pfatal_with_name (name)
      char *name;
 {
+  char *s;
+#if HAVE_SYSNERR
   extern int errno, sys_nerr;
   extern char *sys_errlist[];
-  char *s;
 
   if (errno < sys_nerr)
     s = concat ("", sys_errlist[errno], " for %s");
   else
+#endif
     s = "cannot open %s";
   fatal (s, name);
 }
@@ -1239,13 +1241,15 @@ pfatal_with_name (name)
 perror_with_name (name)
      char *name;
 {
+  char *s;
+#if HAVE_SYSNERR
   extern int errno, sys_nerr;
   extern char *sys_errlist[];
-  char *s;
 
   if (errno < sys_nerr)
     s = concat ("", sys_errlist[errno], " for %s");
   else
+#endif
     s = "cannot open %s";
   error (s, name);
 }
